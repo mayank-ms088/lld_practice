@@ -28,7 +28,11 @@ public class Match {
     }
 
     public void startMatch() {
-        Inning curInning = new Inning(teamASquad, teamBSquad);
+        Inning curInning = new Inning(teamASquad, teamBSquad, this.format);
         this.innings.add(curInning);
+        while (!curInning.isCompleted()) {
+            Ball ball = new Ball();
+            curInning.handleNextBall(ball);
+        }
     }
 }

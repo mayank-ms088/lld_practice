@@ -15,7 +15,7 @@ import lombok.Getter;
  * @author Mayank Sharma (mayank.sharma@thoughtspot.com)
  */
 public class BattingTeam extends Team {
-    private Queue<Batsman> batterSequence;
+    private Queue<Batsman> battingOrder;
     private Batsman striker;
     private Batsman nonStriker;
     @Getter
@@ -23,18 +23,17 @@ public class BattingTeam extends Team {
     @Getter
     private long totalRuns;
 
-    public BattingTeam(final List<Person> playing11, final List<Person> onBench, final String teamName) {
+    public BattingTeam(final List<Person> playing11, final List<Person> onBench,
+            final Queue<Batsman> battingOrder, final String teamName) {
         super(playing11, onBench, teamName);
-        playing11.forEach(v -> {
-            batterSequence.add(new Batsman(v));
-        });
+        this.battingOrder = battingOrder;
         isAllOut = false;
         striker = getNextBatter();
         nonStriker = getNextBatter();
     }
 
     private Batsman getNextBatter() {
-        return batterSequence.poll();
+        return battingOrder.poll();
     }
 
     private void changeStrike() {
@@ -47,7 +46,7 @@ public class BattingTeam extends Team {
         striker.updateScore(ball);
         if (ball.getBallType() == BallType.WICKET) {
             if (striker.isOut()) {
-                if (!batterSequence.isEmpty()) {
+                if (!battingOrder.isEmpty()) {
                     striker = getNextBatter();
                 } else {
                     isAllOut = true;

@@ -13,29 +13,27 @@ import java.util.List;
  * @author Mayank Sharma (mayank.sharma@thoughtspot.com)
  */
 public class BowlingTeam extends Team {
-    private Deque<Bowler> bowlerSequence;
+    private List<Bowler> bowlerList;
     private Bowler bowler;
     private long totalWickets;
     private long totalExtras;
-
+    private long oversLeft;
+    private MatchFormat format;
     public BowlingTeam(
-            final List<Person> playing11, final List<Person> onBench, final String teamName) {
+            final List<Person> playing11, final List<Person> onBench, final String teamName,
+            final MatchFormat format) {
         super(playing11, onBench, teamName);
+        oversLeft = format.getMaxOverLimit();
         playing11.forEach(v -> {
-            bowlerSequence.add(new Bowler(v));
+            bowlerList.add(new Bowler(v));
         });
         bowler = getNextBowler();
     }
 
     private Bowler getNextBowler() {
-        Bowler nextPerson = null;
-        while(!bowlerSequence.isEmpty() && !bowlerSequence.peekFirst().areOversLeft()) {
-            bowlerSequence.pollFirst();
-        }
-        if (!bowlerSequence.isEmpty()) {
-            nextPerson = bowlerSequence.pollFirst();
-        }
-        if (nextPerson != null) bowlerSequence.addLast(nextPerson);
+        oversLeft--;
+        if (oversLeft < 0) return null;
+        Bowler nextPerson = bow
         return nextPerson;
     }
 
@@ -54,5 +52,13 @@ public class BowlingTeam extends Team {
 
     public boolean areOversLeft() {
         return bowler != null;
+    }
+
+    public long getTotalWickets() {
+        return totalWickets;
+    }
+
+    public long getTotalExtras() {
+        return totalExtras;
     }
 }

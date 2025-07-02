@@ -13,7 +13,6 @@ import java.util.List;
  * @author Mayank Sharma (mayank.sharma@thoughtspot.com)
  */
 public class Bowler extends Player {
-    private long maxOverAllowedPerBowler = 10;
     private long wickets;
     private double economyRate;
     private List<Over> overBowled;
@@ -39,10 +38,5 @@ public class Bowler extends Player {
 
     boolean isCurrentOverCompleted() {
         return currentOver.isCompleted();
-    }
-
-    boolean areOversLeft() {
-        return !(overBowled.size() == maxOverAllowedPerBowler
-                && currentOver.isCompleted());
     }
 }
